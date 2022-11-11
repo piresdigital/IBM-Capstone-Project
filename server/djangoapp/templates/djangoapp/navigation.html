@@ -1,0 +1,74 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'djangoapp:index' %}"> Best Cars 🥇 </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#mobileNavigation"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="mobileNavigation">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'djangoapp:index' %}">
+          Home <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'djangoapp:about-us' %}"> About Us </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'djangoapp:contact-us' %}">
+          Contact Us
+        </a>
+      </li>
+    </ul>
+
+    {% if not user.is_authenticated and not login %}
+    <form
+      action="{% url 'djangoapp:login' %}"
+      method="post"
+      class="form-inline my-2 my-lg-0">
+      {% csrf_token %}
+      <input
+        class="form-control mr-sm-2"
+        type="text"
+        name="username"
+        placeholder="username"
+        aria-label="Username"
+        required />
+      <input
+        class="form-control mr-sm-2"
+        type="password"
+        name="password"
+        placeholder="***"
+        aria-label="Password"
+        required />
+      <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
+      <a
+        href="{% url 'djangoapp:signup' %}"
+        class="btn btn-light my-2 my-sm-0 ml-2">
+        Sign Up
+      </a>
+    </form>
+    {% endif %}
+
+    <!-- Show only when user is authenticated -->
+    {% if user.is_authenticated %}
+    <form
+      action="{% url 'djangoapp:logout' %}"
+      method="post"
+      class="form-inline my-2 my-lg-0">
+      {% csrf_token %}
+      <span class="navbar-text text-light"> {{ user }} </span>
+      <button class="btn btn-light my-2 my-sm-0 ml-2" type="submit">
+        Logout
+      </button>
+    </form>
+    {% endif %}
+  </div>
+</nav>

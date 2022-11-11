@@ -1,0 +1,11 @@
+applications:
+  - name: capstoneproject
+    routes:
+      - route: dhavidy-capstoneproject.au-syd.cf.appdomain.cloud
+    memory: 128M
+    buildpack: python_buildpack
+  - name: capstoneproject-nginx
+    routes:
+      - route: dhavidy-capstoneproject.au-syd.cf.appdomain.cloud/static
+    memory: 128M
+    buildpack: staticfile_buildpack

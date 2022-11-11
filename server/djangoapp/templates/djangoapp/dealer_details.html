@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dealership Review | Best Cars Dealership Review</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  </head>
+
+  <body>
+    <!-- Add nav here -->
+    {% include './navigation.html' %}
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm pt-4">
+          {% if dealer %}
+          <h2 class="pt-2 pb-2">Dealership Reviews</h2>
+          <div class="jumbotron mt-2">
+            <h1 class="display-4">{{ dealer.short_name }}</h1>
+            <p class="lead">
+              {{ dealer.address }}, {{ dealer.city }} - {{ dealer.state }}
+            </p>
+            <hr class="my-4" />
+
+            {% if user.is_authenticated %}
+            <a
+              class="btn btn-primary btn-lg"
+              href="{% url 'djangoapp:add_review' dealer.id%}"
+              role="button"
+              >Write a review</a
+            >
+            {% endif %}
+          </div>
+          {% endif %} {% if reviews %} {% for review in reviews %}
+          <div class="row">
+            <div class="col-sm">
+              <div class="card mt-4 mb-4">
+                <div class="card-body" style="position: relative">
+                  <h3 class="card-title">{{ review.name }}</h3>
+                  <p class="card-text">{{ review.review }}</p>
+
+                  {% if review.purchase %}
+                  <div class="card">
+                    <div class="card-header">
+                      {{ review.purchase_date }}
+                      <span class="badge badge-info">Vehicle Purchased</span>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li>Make: {{ review.car_make }}</li>
+                        <li>Model: {{ review.car_model }}</li>
+                        <li>Year: {{ review.car_year }}</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <h6 class="card-subtitle mb-2 text-muted"></h6>
+                  {% endif %} {% if review.sentiment == 'neutral' %}
+                  <div
+                    class="alert alert-secondary"
+                    style="
+                      position: absolute;
+                      top: 10px;
+                      right: 10px;
+                      font-size: 12px;
+                    "
+                    role="alert">
+                    Neutral Sentiment
+                  </div>
+                  {% endif %} {% if review.sentiment == 'positive' %}
+                  <div
+                    class="alert alert-success"
+                    style="
+                      position: absolute;
+                      top: 10px;
+                      right: 10px;
+                      font-size: 12px;
+                    "
+                    role="alert">
+                    Positive Sentiment
+                  </div>
+                  {% endif %} {% if review.sentiment == 'negative' %}
+                  <div
+                    class="alert alert-alert"
+                    style="
+                      position: absolute;
+                      top: 10px;
+                      right: 10px;
+                      font-size: 12px;
+                    "
+                    role="alert">
+                    Negative Sentiment
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %} {% endif %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

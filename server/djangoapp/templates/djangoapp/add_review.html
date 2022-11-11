@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      Add Review For {{ dealer.full_name }} | Best Cars Dealership Review
+    </title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
+      rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    <style>
+      #displayConditional {
+        visibility: hidden;
+      }
+      .show {
+        visibility: visible !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Add nav here -->
+    {% include './navigation.html' %}
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <h2 class="mb-4 mt-5 pt-3 text-center">Add Review</h2>
+
+          <div class="jumbotron mt-2">
+            <h1 class="display-4">{{ dealer.short_name }}</h1>
+            <p class="lead">
+              {{ dealer.address }}, {{ dealer.city }} - {{ dealer.state }}
+            </p>
+          </div>
+
+          {% if user.is_authenticated %}
+          <div class="card mt-4 mb-4">
+            <div class="card-body" style="position: relative">
+              <h3 class="card-title">Reviewing: {{ dealer.full_name}}</h3>
+              <div class="card-text">
+                <form
+                  action="/djangoapp/dealer/{{dealer.id}}/add_review"
+                  method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="content"
+                      ><b>Enter your review content:</b></label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="content"
+                      name="content"
+                      rows="2"
+                      required></textarea>
+                  </div>
+                  <div class="form-group form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="purchasecheck"
+                      onchange="toggleDisplay()" />
+                    <label for="purchasecheck"
+                      >Did you purchase the car?
+                    </label>
+                  </div>
+                  <div id="displayConditional">
+                    <div class="form-group">
+                      <label for="car">Select your car:</label>
+                      <select name="car" id="car" class="form-select">
+                        {% for car in cars %}
+                        <option selected value="{{car.id}}">
+                          {{car.car_make.name}} {{car.name}} {{ car.year }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="purchasedate"
+                        >Select your purchase date (dd/mm/yyyy):</label
+                      >
+                      <input
+                        class="form-control"
+                        type="date"
+                        name="purchasedate"
+                        id="purchasedate" />
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <script>
+      function toggleDisplay() {
+        document.getElementById('displayConditional').classList.toggle('show');
+      }
+    </script>
+  </body>
+</html>
